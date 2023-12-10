@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ShoePing from '../assets/logo/ShoePing.png';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -19,6 +20,16 @@ const ModalContainer = styled.div`
   background-color: white;
   padding: 20px;
   z-index: 1000;
+`;
+
+const Logo = styled.img`
+  height: 2.5rem;
+  margin-top: 0.4rem;
+  margin-left: 1.2rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Input = styled.input`
@@ -55,7 +66,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
   const handleSignup = () => {
-    // 회원가입 처리 로직을 여기에 추가
     onClose();
   };
 
@@ -63,6 +73,9 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
     <>
       <ModalOverlay onClick={onClose} />
       <ModalContainer>
+        <div>
+          <Logo src={ShoePing} alt="ShoePing Logo" />
+        </div>
         회원가입
         <div>
           <Input

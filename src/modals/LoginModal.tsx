@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ShoePing from '../assets/logo/ShoePing.png';
+import { auth, signInWithEmailAndPassword } from '../firebase';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -63,8 +64,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleLogin = () => {
-    onClose();
+  const handleLogin = async () => {
+    try {
+      // Firebase를 사용하여 이메일과 비밀번호로 로그인
+      await signInWithEmailAndPassword(auth, email, password);
+
+      // 로그인 성공 시 추가 작업 수행
+      // 예: 리다이렉션, 상태 업데이트 등
+
+      // 모달 닫기
+      console.log('로그인 성공');
+      console.log(auth.currentUser, email, password);
+      onClose();
+    } catch (error) {
+      // 로그인 실패 시 에러 처리
+      console.error('로그인 실패');
+      // 에러를 사용자에게 표시하는 등의 추가 작업 수행
+    }
   };
 
   return (

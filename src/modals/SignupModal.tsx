@@ -1,6 +1,12 @@
+/* eslint-disable no-console */
 import React from 'react';
 import styled from 'styled-components';
 import ShoePing from '../assets/logo/ShoePing.png';
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from '../firebase';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -65,8 +71,32 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
-  const handleSignup = () => {
-    onClose();
+  const handleSignup = async () => {
+    try {
+      // Firebase에 이메일 및 비밀번호로 사용자 생성
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      // 사용자의 프로필 업데이트 (이름 설정)
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+
+      // 회원가입 성공 시 추가 작업 수행
+      // 예: 사용자에게 환영 이메일 보내기, 로그인 상태 유지 등
+
+      // 모달 닫기
+      console.log('회원가입 성공:');
+      console.log(userCredential.user, email, password);
+      onClose();
+    } catch (error) {
+      // 회원가입 실패 시 에러 처리
+      console.error('회원가입 실패:');
+      // 에러를 사용자에게 표시하는 등의 추가 작업 수행
+    }
   };
 
   return (
@@ -103,7 +133,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         </div>
         <div>
           <Input
-            type="passwordConfirm"
+            type="password"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
             placeholder="비밀번호 확인"
